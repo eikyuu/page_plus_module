@@ -5,55 +5,67 @@
             <input type="hidden" name="{$name}" value="{$edit_language_locale}" />
         {/form_field}
 
-        {render_form_field form=$form field="success_url" value={url path='/admin/module/PagePlus/page_plus/edit?page_plus_id=_ID_'}}
+    <div>
+        <div class="page_plus_form">
+            {form_field form=$form field="title"}
+                <div class="form-group">
+                    <label class="control-label" for="{$label_attr.for}">
+                        {$label}
+                        {if $required}<span class="required">*</span>{/if}
+                    </label>
 
-        {form_field form=$form field="title"}
-            <div class="form-group">
-                <label class="control-label" for="{$label_attr.for}">
-                    {$label}
-                    {if $required}<span class="required">*</span>{/if}
-                </label>
+                    {form_error form=$form field="title"}{$message}{/form_error}
 
-                {form_error form=$form field="title"}{$message}{/form_error}
+                    <input type="text" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$TITLE}" placeholder="{intl l='The PagePlus title'}" />
+                </div>
+            {/form_field}
+            {form_field form=$form field="description"}
+                <div class="form-group">
+                    <label class="control-label" for="{$label_attr.for}">
+                        {$label}
+                        {if $required}<span class="required">*</span>{/if}
+                    </label>
 
-                <input type="text" class="form-control" name="{$name}" id="{$label_attr.for}" value="{$TITLE}" placeholder="{intl l='The PagePlus title'}" />
-            </div>
-        {/form_field}
-        {form_field form=$form field="description"}
-            <div class="form-group">
-                <label class="control-label" for="{$label_attr.for}">
-                    {$label}
-                    {if $required}<span class="required">*</span>{/if}
-                </label>
+                    {form_error form=$form field="description"}{$message}{/form_error}
 
-                {form_error form=$form field="description"}{$message}{/form_error}
+                    <textarea class="form-control" name="{$name}[]" id="{$label_attr.for}"placeholder="{intl l='The PagePlus description'}">{$DESCRIPTION}</textarea>
+                </div>
+            {/form_field}
+            {form_field form=$form field="image"}
+                <div class="form-group">
+                    <label class="control-label" for="{$label_attr.for}">
+                        {$label}
+                        {if $required}<span class="required">*</span>{/if}
+                    </label>
 
-                <textarea class="form-control" name="{$name}" id="{$label_attr.for}"placeholder="{intl l='The PagePlus description'}">{$DESCRIPTION}</textarea>
-            </div>
-        {/form_field}
-        {form_field form=$form field="image"}
-            <div class="form-group">
-                <label class="control-label" for="{$label_attr.for}">
-                    {$label}
-                    {if $required}<span class="required">*</span>{/if}
-                </label>
+                    {form_error form=$form field="image"}{$message}{/form_error}
 
-                {form_error form=$form field="image"}{$message}{/form_error}
+                    <input type="file" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$IMAGE}" placeholder="{intl l='The PagePlus image'}" />
+                </div>
+            {/form_field}
+            {form_field form=$form field="alt"}
+                <div class="form-group">
+                    <label class="control-label" for="{$label_attr.for}">
+                        {$label}
+                        {if $required}<span class="required">*</span>{/if}
+                    </label>
 
-                <input type="file" class="form-control" name="{$name}" id="{$label_attr.for}" value="{$IMAGE}" placeholder="{intl l='The PagePlus image'}" />
-            </div>
-        {/form_field}
-        {form_field form=$form field="alt"}
-            <div class="form-group">
-                <label class="control-label" for="{$label_attr.for}">
-                    {$label}
-                    {if $required}<span class="required">*</span>{/if}
-                </label>
+                    {form_error form=$form field="alt"}{$message}{/form_error}
 
-                {form_error form=$form field="alt"}{$message}{/form_error}
-
-                <input type="text" class="form-control" name="{$name}" id="{$label_attr.for}" value="{$ALT}" placeholder="{intl l='The PagePlus alt'}" />
-            </div>
-        {/form_field}
-
+                    <input type="text" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$ALT}" placeholder="{intl l='The PagePlus alt'}" />
+                </div>
+            {/form_field}
+        </div>
+    </div>
     {/form}
+    <button type="button" id="add">Ajouter ligne</button>
+    <script>
+        document.querySelector('#add').addEventListener('click', function(event) 
+            {
+                if( document.querySelectorAll('.page_plus_form').length < 5 ) 
+                    {
+                        var first = document.querySelector('.page_plus_form');
+                        first.parentNode.appendChild(first.cloneNode(true));
+                    }
+            });
+    </script>
