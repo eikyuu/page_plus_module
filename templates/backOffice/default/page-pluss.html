@@ -1,0 +1,254 @@
+{extends file="admin-layout.tpl"}
+{default_translation_domain domain='pageplus.bo.default'}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'tools'}
+{/block}
+
+{block name="page-title"}{intl l='PagePlus'}{/block}
+
+{block name="check-resource"}admin.module{/block}
+{block name="check-access"}view{/block}
+{block name="check-module"}PagePlus{/block}
+
+{block name="main-content"}
+    <div id="wrapper" class="container">
+
+        {if $general_error}
+            <div class="alert alert-danger">
+                {$general_error}
+            </div>
+        {/if}
+
+        <!-- PagePlus list -->
+        <div class="general-block-decorator">
+            <div class="table-responsive">
+                <table class="table table-striped table-condensed" id="page_plus-table">
+                    <caption class="clearfix">
+                        {intl l="Page plus"}
+
+                        {loop name="auth-create" type="auth" role="ADMIN" resource="admin.module" access="CREATE" module="PagePlus"}
+                            <div class="pull-right">
+                                <a class="btn btn-default btn-primary" title="{intl l='Create a new PagePlus entry' d='pageplus.bo.default'}" data-target="#page_plus-create" data-toggle="modal">
+                                    <i class="glyphicon glyphicon-plus-sign"></i>
+                                </a>
+                            </div>
+                        {/loop}
+                    </caption>
+
+                    <thead>
+                    <tr>
+                        <th>
+                            {admin_sortable_header
+                                current_order=$order
+                                order='id'
+                                reverse_order='id-reverse'
+                                path={url path='/admin/module/PagePlus/page_plus' target='page_plus-table'}
+                                label="{intl l='Id' d='pageplus.bo.default'}"
+                            }
+                        </th>
+                        <th>
+                            {admin_sortable_header
+                                current_order=$order
+                                order='title'
+                                reverse_order='title-reverse'
+                                path={url path='/admin/module/PagePlus/page_plus' target='page_plus-table'}
+                                label="{intl l='Title' d='pageplus.bo.default'}"
+                            }
+                        </th>
+                        <th>
+                            {admin_sortable_header
+                                current_order=$order
+                                order='image'
+                                reverse_order='image-reverse'
+                                path={url path='/admin/module/PagePlus/page_plus' target='page_plus-table'}
+                                label="{intl l='Image' d='pageplus.bo.default'}"
+                            }
+                        </th>
+                        <th>
+                            {admin_sortable_header
+                                current_order=$order
+                                order='alt'
+                                reverse_order='alt-reverse'
+                                path={url path='/admin/module/PagePlus/page_plus' target='page_plus-table'}
+                                label="{intl l='Alt' d='pageplus.bo.default'}"
+                            }
+                        </th>
+                        <th>
+                            {intl l="Actions"}
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {loop name="page-plus-list" type="page-plus" order=$order}
+                        <tr>
+                            <td>
+                                <a href="{url path='/admin/module/PagePlus/page_plus/edit' page_plus_id=$ID}">{$ID}</a>
+                            </td>
+                            <td>
+                                <a href="{url path='/admin/module/PagePlus/page_plus/edit' page_plus_id=$ID}">{$TITLE}</a>
+                            </td>
+                            <td>
+                                {$IMAGE}
+                            </td>
+                            <td>
+                                {$ALT}
+                            </td>
+                            {* Actions *}
+                            <td>
+                                <div class="btn-group">
+                                    {loop name="auth-edit" type="auth" role="ADMIN" resource="admin.module" access="UPDATE" module="PagePlus"}
+                                        <a class="btn btn-default btn-xs" title="{intl l='Edit this PagePlus' d='pageplus.bo.default'}"  href="{url path='/admin/module/PagePlus/page_plus/edit' page_plus_id=$ID}">
+                                            <i class="glyphicon glyphicon-edit"></i>
+                                        </a>
+                                    {/loop}
+                                    {loop name="auth-delete" type="auth" role="ADMIN" resource="admin.module" access="DELETE" module="PagePlus"}
+                                        <a class="btn btn-default btn-xs page_plus-delete" title="{intl l='Delete this PagePlus' d='pageplus.bo.default'}" data-target="#page_plus-delete" data-toggle="modal" data-id="{$ID}">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                        </a>
+                                    {/loop}
+                                </div>
+                            </td>
+                        </tr>
+                    {/loop}
+                    {elseloop rel="page-plus-list"}
+                        <tr>
+                            <td colspan="1000">
+                                <div class="alert alert-info">
+                                    {intl l="There is no PagePlus" d="pageplus.bo.default"}
+                                </div>
+                            </td>
+                        </tr>
+                    {/elseloop}
+                    </tbody>
+
+                    {ifloop rel="page-plus-list"}
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                {include
+                                file           = "includes/pagination.html"
+
+                                loop_ref       = "page-plus-list"
+                                max_page_count = 20
+                                page_url       = "{url path="/admin/module/PagePlus/page_plus" order=$order target='page_plus-table'}"
+                                }
+                            </td>
+                        </tr>
+                    </tfoot>
+                    {/ifloop}
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    {* CREATE Modal *}
+
+    {form name="page_plus.create"}
+    {capture "page_plus_create"}
+        {form_hidden_fields form=$form}
+
+        {form_field form=$form field="locale"}
+            <input type="hidden" name="{$name}" value="{$edit_language_locale}" />
+        {/form_field}
+
+        {render_form_field form=$form field="success_url" value={url path='/admin/module/PagePlus/page_plus/edit?page_plus_id=_ID_'}}
+
+        {form_field form=$form field="title"}
+            <div class="form-group">
+                <label class="control-label" for="{$label_attr.for}">
+                    {$label}
+                    {if $required}<span class="required">*</span>{/if}
+                </label>
+
+                {form_error form=$form field="title"}{$message}{/form_error}
+
+                <input type="text" class="form-control" name="{$name}" id="{$label_attr.for}" value="{$TITLE}" placeholder="{intl l='The PagePlus title'}" />
+            </div>
+        {/form_field}
+        {form_field form=$form field="description"}
+            <div class="form-group">
+                <label class="control-label" for="{$label_attr.for}">
+                    {$label}
+                    {if $required}<span class="required">*</span>{/if}
+                </label>
+
+                {form_error form=$form field="description"}{$message}{/form_error}
+
+                <textarea class="form-control" name="{$name}" id="{$label_attr.for}"placeholder="{intl l='The PagePlus description'}">{$DESCRIPTION}</textarea>
+            </div>
+        {/form_field}
+        {form_field form=$form field="image"}
+            <div class="form-group">
+                <label class="control-label" for="{$label_attr.for}">
+                    {$label}
+                    {if $required}<span class="required">*</span>{/if}
+                </label>
+
+                {form_error form=$form field="image"}{$message}{/form_error}
+
+                <input type="text" class="form-control" name="{$name}" id="{$label_attr.for}" value="{$IMAGE}" placeholder="{intl l='The PagePlus image'}" />
+            </div>
+        {/form_field}
+        {form_field form=$form field="alt"}
+            <div class="form-group">
+                <label class="control-label" for="{$label_attr.for}">
+                    {$label}
+                    {if $required}<span class="required">*</span>{/if}
+                </label>
+
+                {form_error form=$form field="alt"}{$message}{/form_error}
+
+                <input type="text" class="form-control" name="{$name}" id="{$label_attr.for}" value="{$ALT}" placeholder="{intl l='The PagePlus alt'}" />
+            </div>
+        {/form_field}
+    {/capture}
+
+    {include file="includes/generic-create-dialog.html"
+
+
+        dialog_id       = "page_plus-create"
+        dialog_title    = {intl l="Create an entry of PagePlus" d="pageplus.bo.default"}
+        dialog_body     = {$smarty.capture.page_plus_create nofilter}
+
+        dialog_ok_label     = {intl l="Create"}
+        dialog_cancel_label = {intl l="Cancel"}
+
+        form_action        = {$current_url}
+        form_enctype       = {form_enctype form=$form}
+    }
+    {/form}
+
+
+    {* DELETE modal *}
+
+    {capture "page_plus_delete"}
+        {intl l="Do you really want to delete this PagePlus entry ?" d="pageplus.bo.default"}
+        <input type="hidden" name="page_plus_id" id="page_plus_delete_id" value="" />
+    {/capture}
+
+    {include file="includes/generic-confirm-dialog.html"
+
+        dialog_id       = "page_plus-delete"
+        dialog_title    = {intl l="Delete an entry of PagePlus" d="pageplus.bo.default"}
+        dialog_message  = {$smarty.capture.page_plus_delete nofilter}
+
+        dialog_ok_label     = {intl l="Delete"}
+        dialog_cancel_label = {intl l="Cancel"}
+
+        form_action         = {token_url path='/admin/module/PagePlus/page_plus/delete'}
+    }
+{/block}
+
+{block name="javascript-initialization"}
+    <script>
+        $(function() {
+            $('a.page_plus-delete').click(function(ev) {
+                $('#page_plus_delete_id').val($(this).data('id'));
+            });
+        });
+    </script>
+{/block}

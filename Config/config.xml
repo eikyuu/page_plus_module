@@ -1,50 +1,62 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<config xmlns="http://thelia.net/schema/dic/config"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
-
-    <loops>
-        <!-- sample definition
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://thelia.net/schema/dic/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
+  <loops>
+    <!-- sample definition
         <loop name="MySuperLoop" class="PagePlus\Loop\MySuperLoop" />
         -->
-    </loops>
-
-    <forms>
-        <!--
+    <loop name="page-plus" class="PagePlus\Loop\PagePlus"/>
+    <loop name="page-plus-product" class="PagePlus\Loop\PagePlusProduct"/>
+  </loops>
+  <forms>
+    <!--
         <form name="MyFormName" class="PagePlus\Form\MySuperForm" />
         -->
-    </forms>
-
-    <commands>
-        <!--
+    <form name="page_plus.create" class="PagePlus\Form\PagePlusCreateForm"/>
+    <form name="page_plus.update" class="PagePlus\Form\PagePlusUpdateForm"/>
+    <form name="page_plus_product.create" class="PagePlus\Form\PagePlusProductCreateForm"/>
+    <form name="page_plus_product.update" class="PagePlus\Form\PagePlusProductUpdateForm"/>
+  </forms>
+  <commands>
+    <!--
         <command class="PagePlus\Command\MySuperCommand" />
         -->
-    </commands>
-
-    <!--
+  </commands>
+  <!--
     <services>
 
     </services>
     -->
 
-    <!--
     <hooks>
-        <hook id="pageplus.hook" class="PagePlus\Hook\MySuperHook">
-            <tag name="hook.event_listener" event="main.body.bottom" type="front|back|pdf|email" method="onMainBodyBottom" />
+        <hook id="pageplus.hook" class="PagePlus\Hook\PagePlusHook">
+            <tag name="hook.event_listener" event="product.modification.form_bottom" type="back" method="onProductPagePlus" />
         </hook>
     </hooks>
-    -->
 
-    <!--
+  <!--
     <exports>
 
     </exports>
     -->
-
-    <!--
+  <!--
     <imports>
 
     </imports>
     -->
+  <services>
+    <service id="action.pageplus.page_plus_table" class="PagePlus\Action\PagePlusAction">
+      <tag name="kernel.event_subscriber"/>
+    </service>
+    <service id="pageplus.form.type.page_plus_id" class="PagePlus\Form\Type\PagePlusIdType">
+      <argument id="thelia.translator" type="service"/>
+      <tag name="thelia.form.type"/>
+    </service>
+    <service id="action.pageplus.page_plus_product_table" class="PagePlus\Action\PagePlusProductAction">
+      <tag name="kernel.event_subscriber"/>
+    </service>
+    <service id="pageplus.form.type.page_plus_product_id" class="PagePlus\Form\Type\PagePlusProductIdType">
+      <argument id="thelia.translator" type="service"/>
+      <tag name="thelia.form.type"/>
+    </service>
+  </services>
 </config>

@@ -1,10 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<routes xmlns="http://symfony.com/schema/routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
-
-    <!--
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+  <!--
 
     if a /admin/module/pageplus/ route is provided, a "Configuration" button will be displayed
     for the module in the module list. Clicking this button will invoke this route.
@@ -27,5 +23,34 @@
     ...
     </route>
     -->
-
+  <route id="pageplus.page_plus.list" path="/admin/module/PagePlus/page_plus" methods="get">
+    <default key="_controller">PagePlus:PagePlus:default</default>
+  </route>
+  <route id="pageplus.page_plus.create" path="/admin/module/PagePlus/page_plus" methods="post">
+    <default key="_controller">PagePlus:PagePlus:create</default>
+  </route>
+  <route id="pageplus.page_plus.view" path="/admin/module/PagePlus/page_plus/edit" methods="get">
+    <default key="_controller">PagePlus:PagePlus:update</default>
+  </route>
+  <route id="pageplus.page_plus.edit" path="/admin/module/PagePlus/page_plus/edit" methods="post">
+    <default key="_controller">PagePlus:PagePlus:processUpdate</default>
+  </route>
+  <route id="pageplus.page_plus.delete" path="/admin/module/PagePlus/page_plus/delete" methods="post">
+    <default key="_controller">PagePlus:PagePlus:delete</default>
+  </route>
+  <route id="pageplus.page_plus_product.list" path="/admin/module/PagePlus/page_plus_product" methods="get">
+    <default key="_controller">PagePlus:PagePlusProduct:default</default>
+  </route>
+  <route id="pageplus.page_plus_product.create" path="/admin/module/PagePlus/page_plus_product" methods="post">
+    <default key="_controller">PagePlus:PagePlusProduct:create</default>
+  </route>
+  <route id="pageplus.page_plus_product.view" path="/admin/module/PagePlus/page_plus_product/edit" methods="get">
+    <default key="_controller">PagePlus:PagePlusProduct:update</default>
+  </route>
+  <route id="pageplus.page_plus_product.edit" path="/admin/module/PagePlus/page_plus_product/edit" methods="post">
+    <default key="_controller">PagePlus:PagePlusProduct:processUpdate</default>
+  </route>
+  <route id="pageplus.page_plus_product.delete" path="/admin/module/PagePlus/page_plus_product/delete" methods="post">
+    <default key="_controller">PagePlus:PagePlusProduct:delete</default>
+  </route>
 </routes>
