@@ -2,12 +2,14 @@
 
 namespace PagePlus\EventListeners;
 
-use PagePlus\PagePlus;
-use PagePlus\Model\PagePlusQuery;
 use PagePlus\Event\PagePlusEvent;
+use PagePlus\Model\PagePlusQuery;
 use PagePlus\Event\PagePlusEvents;
+use PagePlus\Model\PagePlusProduct;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\HttpFoundation\Request;
+use PagePlus\Model\PagePlusProductQuery;
+use PagePlus\Model\PagePlus;
 use Thelia\Core\Event\Product\ProductEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -33,22 +35,65 @@ class AddPagePlusListener implements EventSubscriberInterface
     public function notif(ProductEvent $event)
     {
         $request = $this->request;
-        print_r($_POST);exit;
-        $pagePlusProductId = $request->get('product_id');
-        $pagePlus = PagePlusQuery::create()->findByProductId($pagePlusProductId);
+        
+        //print_r($_POST);exit;
+        
+        // $count = count($request->get('page_plus_create'));
+        $count = count($request->get('page_plus_create')['title']);
         // si ca existe mise a jours
         
-        for ($i=0; $i <= $count - 1; $i++ ) 
-        {
-            if(count($pagePlus) > 0) {
-            
-            }
-            else {
-                $newPagePlus = new PagePlus();
-    
-            }
-        }   
+         
+               $pagePlus = PagePlusProductQuery::create()->findByProductId($request->get('product_id'));
+               if(count($pagePlus) == 0) {
 
+                    for ($i=0; $i <= $count -1; $i++ ) 
+                    {
+                        //print_r($request->get('page_plus_create'));exit;
 
+                        $newPagePlus = new PagePlus();
+                        $newPagePlus->setLocale('fr_FR');
+                        $newPagePlus->setTitle($request->get('page_plus_create')['title'][$i]);
+                        $newPagePlus->setDescription($request->get('page_plus_create')['description'][$i]);
+                        $newPagePlus->setImage($request->get('page_plus_create')['image'][$i]);
+                        $newPagePlus->setAlt($request->get('page_plus_create')['alt'][$i]);
+                        $newPagePlus->save();
+
+                        $pagePlusProduct = new PagePlusProduct();
+                        $pagePlusProduct->setPagePlusId($newPagePlus->getId());
+                        $pagePlusProduct->setProductId($request->get('product_id'));
+                        $pagePlusProduct->save();
+                    } 
+
+                }
+                else 
+                {
+                    $pagePlus = PagePlusProductQuery::create()->findByProductId($request->get('product_id'));
+
+                    foreach($pagePlus as $pp)
+                    {
+                        $deletePagePlus = PagePlusQuery::create()->findOneById($pp->getPagePlusId());
+                        $deletePagePlus->delete();
+
+                        $pp->delete();
+                    }
+
+                    for ($i=0; $i <= $count -1; $i++ ) 
+                    {
+                        //print_r($request->get('page_plus_create'));exit;
+
+                        $newPagePlus = new PagePlus();
+                        $newPagePlus->setLocale('fr_FR');
+                        $newPagePlus->setTitle($request->get('page_plus_create')['title'][$i]);
+                        $newPagePlus->setDescription($request->get('page_plus_create')['description'][$i]);
+                        $newPagePlus->setImage($request->get('page_plus_create')['image'][$i]);
+                        $newPagePlus->setAlt($request->get('page_plus_create')['alt'][$i]);
+                        $newPagePlus->save();
+
+                        $pagePlusProduct = new PagePlusProduct();
+                        $pagePlusProduct->setPagePlusId($newPagePlus->getId());
+                        $pagePlusProduct->setProductId($request->get('product_id'));
+                        $pagePlusProduct->save();
+                    }
+                }  
     }
 }
