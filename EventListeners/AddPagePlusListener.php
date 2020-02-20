@@ -36,9 +36,6 @@ class AddPagePlusListener implements EventSubscriberInterface
     {
         $request = $this->request;
         
-        //print_r($_POST);exit;
-        
-        // $count = count($request->get('page_plus_create'));
         $count = count($request->get('page_plus_create')['title']);
         // si ca existe mise a jours
         
@@ -48,15 +45,19 @@ class AddPagePlusListener implements EventSubscriberInterface
 
                     for ($i=0; $i <= $count -1; $i++ ) 
                     {
-                        //print_r($request->get('page_plus_create'));exit;
+                        // $sortname = $_FILES['page_plus_create']['name'];
+                        // $filePath = "pim\web\media\pageplus".'-'.$_FILES['page_plus_create']['name'];
 
                         $newPagePlus = new PagePlus();
                         $newPagePlus->setLocale('fr_FR');
                         $newPagePlus->setTitle($request->get('page_plus_create')['title'][$i]);
                         $newPagePlus->setDescription($request->get('page_plus_create')['description'][$i]);
-                        $newPagePlus->setImage($request->get('page_plus_create')['image'][$i]);
+                        // $newPagePlus->setImage('gggg');
                         $newPagePlus->setAlt($request->get('page_plus_create')['alt'][$i]);
                         $newPagePlus->save();
+
+                        print_r($_FILES['page_plus_create']['name']);exit;
+                        //print_r($_FILES['page_plus_create']['name']['image'][0]);exit;
 
                         $pagePlusProduct = new PagePlusProduct();
                         $pagePlusProduct->setPagePlusId($newPagePlus->getId());
@@ -79,15 +80,14 @@ class AddPagePlusListener implements EventSubscriberInterface
 
                     for ($i=0; $i <= $count -1; $i++ ) 
                     {
-                        //print_r($request->get('page_plus_create'));exit;
-
                         $newPagePlus = new PagePlus();
                         $newPagePlus->setLocale('fr_FR');
                         $newPagePlus->setTitle($request->get('page_plus_create')['title'][$i]);
                         $newPagePlus->setDescription($request->get('page_plus_create')['description'][$i]);
-                        $newPagePlus->setImage($request->get('page_plus_create')['image'][$i]);
+                        //$newPagePlus->setImage($request->get('page_plus_create')['image'][$i]);
                         $newPagePlus->setAlt($request->get('page_plus_create')['alt'][$i]);
                         $newPagePlus->save();
+                        print_r($_FILES);exit;
 
                         $pagePlusProduct = new PagePlusProduct();
                         $pagePlusProduct->setPagePlusId($newPagePlus->getId());
