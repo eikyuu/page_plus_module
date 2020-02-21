@@ -18,10 +18,10 @@ class PagePlusCreateForm extends BasePagePlusCreateForm
     public function getTranslationKeys()
     {
         return array(
-            "title" => "Title",
+            "title" => "Titre",
             "description" => "Description",
             "image" => "Image",
-            "alt" => "Alt",
+            "alt" => "Décrivez votre image",
         );
     }
 

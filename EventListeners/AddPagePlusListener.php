@@ -84,7 +84,7 @@ class AddPagePlusListener implements EventSubscriberInterface
                         $newPagePlus->setLocale('fr_FR');
                         $newPagePlus->setTitle($request->get('page_plus_create')['title'][$i]);
                         $newPagePlus->setDescription($request->get('page_plus_create')['description'][$i]);
-                        $newPagePlus->setImage($_FILES['page_plus_create']['name']['image'][$i]);
+                        $newPagePlus->setImage($request->get('page_plus_create')['name_image'][$i]);
                         $newPagePlus->setAlt($request->get('page_plus_create')['alt'][$i]);
                         $newPagePlus->save();
                         

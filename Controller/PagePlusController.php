@@ -7,6 +7,8 @@
 namespace PagePlus\Controller;
 
 use PagePlus\Controller\Base\PagePlusController as BasePagePlusController;
+use PagePlus\Model\PagePlusQuery;
+use PagePlus\Model\PagePlusProductQuery;
 
 /**
  * Class PagePlusController
@@ -14,4 +16,15 @@ use PagePlus\Controller\Base\PagePlusController as BasePagePlusController;
  */
 class PagePlusController extends BasePagePlusController
 {
+    public function deleteAjaxAction()
+    {        
+        $pagePlusProduct = PagePlusProductQuery::create()->findOneByPagePlusId($this->getRequest()->get('pagePlus'));
+        $pagePlusProduct->delete();
+
+        $pagePlus = PagePlusQuery::create()->findOneById($this->getRequest()->get('pagePlus'));
+        $pagePlus->delete();
+
+        echo "ok";exit;
+
+    }
 }

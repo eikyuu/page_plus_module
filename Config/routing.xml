@@ -53,4 +53,7 @@
   <route id="pageplus.page_plus_product.delete" path="/admin/module/PagePlus/page_plus_product/delete" methods="post">
     <default key="_controller">PagePlus:PagePlusProduct:delete</default>
   </route>
+  <route id="pageplus.page_plus.delete-ajax" path="/admin/module/PagePlus/delete-page-plus" methods="post">
+    <default key="_controller">PagePlus:PagePlus:deleteAjax</default>
+  </route>
 </routes>

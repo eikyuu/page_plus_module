@@ -2,6 +2,7 @@
 {ifloop rel="page-plus-product-list"}
 {loop name="page-plus-product-list" type="page-plus-product" product_id=$product_id}
     
+{assign var="compteur" value="{$LOOP_COUNT}"}
     {loop name="page-plus-list" type="page-plus" id=$PAGE_PLUS_ID}
 
     {form name="page_plus.create"}
@@ -10,11 +11,10 @@
             {form_field form=$form field="locale"}
                 <input type="hidden" name="{$name}" value="{$edit_language_locale}" />
             {/form_field}
-
-        <div>
+        <div class="myBlock{$PAGE_PLUS_ID}">
             <div class="page_plus_form">
                 {form_field form=$form field="title"}
-                    <div class="form-group">
+                    <div class="form-group col-md-12">
                         <label class="control-label" for="{$label_attr.for}">
                             {$label}
                             {if $required}<span class="required">*</span>{/if}
@@ -25,8 +25,37 @@
                         <input type="text" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$TITLE}" placeholder="{intl l='The PagePlus title'}" />
                     </div>
                 {/form_field}
+                <div class="col-md-6 {if $compteur == 2 OR $compteur == 4}col-md-push-6{/if}">
+                    {form_field form=$form field="image"}
+                        <div class="form-group">
+                            <label class="control-label" for="{$label_attr.for}">
+                                {$label}
+                                {if $required}<span class="required">*</span>{/if}
+                            </label>
+
+                            {form_error form=$form field="image"}{$message}{/form_error}
+
+                            <input type="file" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$IMAGE}" placeholder="{intl l='The PagePlus image'}" />
+                            <input type="hidden" name="page_plus_create[name_image][]" value="{$IMAGE}" />
+                             
+                            <img class="image_page_plus" height="300" width="300" src="/media/pageplus/{$IMAGE}">
+                        </div>
+                    {/form_field}
+                    {form_field form=$form field="alt"}
+                        <div class="form-group">
+                            <label class="control-label" for="{$label_attr.for}">
+                                {$label}
+                                {if $required}<span class="required">*</span>{/if}
+                            </label>
+
+                            {form_error form=$form field="alt"}{$message}{/form_error}
+
+                            <input type="text" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$ALT}" placeholder="{intl l='The PagePlus alt'}" />
+                        </div>
+                    {/form_field}
+                </div>
                 {form_field form=$form field="description"}
-                    <div class="form-group">
+                    <div class="form-group col-md-6 {if $compteur == 2 OR $compteur == 4}col-md-pull-6{/if}">
                         <label class="control-label" for="{$label_attr.for}">
                             {$label}
                             {if $required}<span class="required">*</span>{/if}
@@ -34,37 +63,35 @@
 
                         {form_error form=$form field="description"}{$message}{/form_error}
 
-                        <textarea class="form-control" name="{$name}[]" id="{$label_attr.for}"placeholder="{intl l='The PagePlus description'}">{$DESCRIPTION}</textarea>
-                    </div>
-                {/form_field}
-                {form_field form=$form field="image"}
-                    <div class="form-group">
-                        <label class="control-label" for="{$label_attr.for}">
-                            {$label}
-                            {if $required}<span class="required">*</span>{/if}
-                        </label>
-
-                        {form_error form=$form field="image"}{$message}{/form_error}
-
-                        <input type="file" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$IMAGE}" placeholder="{intl l='The PagePlus image'}" />
-                    </div>
-                {/form_field}
-                {form_field form=$form field="alt"}
-                    <div class="form-group">
-                        <label class="control-label" for="{$label_attr.for}">
-                            {$label}
-                            {if $required}<span class="required">*</span>{/if}
-                        </label>
-
-                        {form_error form=$form field="alt"}{$message}{/form_error}
-
-                        <input type="text" class="form-control" name="{$name}[]" id="{$label_attr.for}" value="{$ALT}" placeholder="{intl l='The PagePlus alt'}" />
+                        <textarea class="form-control textarea_page_plus" name="{$name}[]" id="{$label_attr.for}"placeholder="{intl l='The PagePlus description'}">{$DESCRIPTION}</textarea>
                     </div>
                 {/form_field}
             </div>
         </div>
+        <button type="button" class="btn-danger delete_button_page_plus btnDelete{$PAGE_PLUS_ID}"><i class="glyphicon glyphicon-trash"></i> supprimer la ligne</button>
+        
+        <script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+        <script>
+            jQuery(".btnDelete{$PAGE_PLUS_ID}").click(function() {
+                jQuery.ajax({
+                    url: "/admin/module/PagePlus/delete-page-plus",
+                    type: "POST",
+                    data: "pagePlus="+{$PAGE_PLUS_ID},
+                }).done(function (data) {
+                    if(data == "ok")
+                    {
+                        jQuery(".myBlock{$PAGE_PLUS_ID}").hide();
+                        jQuery(".btnDelete{$PAGE_PLUS_ID}").hide();
+                    }
+                    else
+                    {
+                        alert('error');
+                    }
+                });
+            });
+        </script>
         {/form}
-
+    
 
     {/loop}
 {/loop}
@@ -128,12 +155,16 @@
                     </div>
                 {/form_field}
             </div>
-        </div>
+        </div>        
         {/form}
 {/elseloop}
+<div class="row">
+    <div class="button_page_plus col-md-12">
+        <button class="btn button_add_page_plus" type="button" id="add">Ajoutez une ligne</button>
+    </div>
+</div>   
 
 
-    <button type="button" id="add">Ajouter ligne</button>
     <script>
         document.querySelector('#add').addEventListener('click', function(event) 
             {
